@@ -133,4 +133,26 @@ EOF
 ```
 calicoctl apply -f global-deny-external-api.yaml
 ```
-
+### 5. Deny Egress access based on FQDN
+```
+cat >dns-deny-external-api.yaml <<EOF
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-to-domains
+spec:
+  order: 1
+    allow-internet-egress == "true"
+  types:
+  - Egress
+  egress:
+  - action: Deny
+    destination:
+      domains:
+      - api.slack.com
+      - "*.radarhack.com"
+EOF
+```
+```
+calicoctl apply -f dns-deny-external-api.yam
+```
