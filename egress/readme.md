@@ -160,5 +160,5 @@ spec:
 EOF
 ```
 ```
-kubectl apply  -f dns-deny-external-api.yaml
+kubectl apply  -n my-demo-app -f dns-deny-external-api.yaml
 ```
