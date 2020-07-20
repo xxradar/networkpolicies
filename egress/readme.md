@@ -133,7 +133,7 @@ EOF
 ```
 calicoctl apply -f global-deny-external-api.yaml
 ```
-### 5. Deny Egress access based on FQDN
+### 5. Allow Egress access based on FQDN
 In order to continue, let's delete the previous policies.
 ```
 kubectl delete networkpolicies  allow-80-443-egress -n my-demo-app 
