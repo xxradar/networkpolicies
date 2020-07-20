@@ -3,7 +3,7 @@ In kubernetes network policies are namespaced (so you have to apply them to ever
 ```
 kubectl create ns my-demo-app
 
- kubectl run -it --rm --image xxradar/hackon -l allow-internet-egress=true -n my-demo-app my-app -- bash
+kubectl run -it --rm --image xxradar/hackon -l allow-internet-egress=true -n my-demo-app my-app -- bash
 ```
 
 ### 1. Default Deny Egress policy
@@ -134,26 +134,31 @@ EOF
 calicoctl apply -f global-deny-external-api.yaml
 ```
 ### 5. Deny Egress access based on FQDN
+In order to continue, let's delete the previous policies.
+```
+kubectl delete networkpolicies  allow-80-443-egress -n my-demo-app 
+calicoctl delete networkpolicies  external-api-access -n my-demo-app 
+calicoctl delete globalnetworkpolicies  global-external-api-access -n my-demo-app 
+```
+Let's create a namespaced network policies blocking a specific fqdn
 ```
 cat >dns-deny-external-api.yaml <<EOF
 apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
 metadata:
-  name: allow-egress-to-domains
+  name: dns-deny-external-api
 spec:
-  order: 1
-  selector:
-    allow-internet-egress == "true"
-  types:
-  - Egress
+  selector: allow-internet-egress == "true"
   egress:
-  - action: Deny
-    destination:
-      domains:
-      - api.slack.com
-      - "*.radarhack.com"
+    - action: Allow
+      source: {}
+      destination:
+        domains:
+          - "*.radarhack.com"
+  types:
+    - Egress
 EOF
 ```
 ```
-calicoctl apply  -n my-demo-app -f dns-deny-external-api.yaml
+kubectl apply  -f dns-deny-external-api.yaml
 ```
