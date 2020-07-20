@@ -142,6 +142,7 @@ metadata:
   name: allow-egress-to-domains
 spec:
   order: 1
+  selector:
     allow-internet-egress == "true"
   types:
   - Egress
@@ -154,5 +155,5 @@ spec:
 EOF
 ```
 ```
-calicoctl apply  -n my-demo-app -f dns-deny-external-api.yam
+calicoctl apply  -n my-demo-app -f dns-deny-external-api.yaml
 ```
