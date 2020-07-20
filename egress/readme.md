@@ -43,9 +43,13 @@ spec:
     matchLabels:
       allow-internet-egress: "true"
   policyTypes:
-  - Egress
   egress:
-  - {}
+  - to:
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
 EOF
 ```
 ```
