@@ -51,7 +51,7 @@ EOF
 ```
 kubectl apply -n my-demo-app -f allow-80-443-egress.yaml 
 ```
-Please note that network policies are applied even on running podsmlabeled with **allow-internet-egress="true"**
+Please note that network policies are applied even on running pods labeled with **allow-internet-egress="true"**
 
 ### 3. Deny Egress access via Calico Network sets
 
