@@ -154,5 +154,5 @@ spec:
 EOF
 ```
 ```
-calicoctl apply -f dns-deny-external-api.yam
+calicoctl apply  -n my-demo-app -f dns-deny-external-api.yam
 ```
