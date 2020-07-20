@@ -26,7 +26,8 @@ spec:
     - protocol: UDP
       port: 53
 EOF
-
+```
+```
 kubectl apply -n my-demo-app -f default-deny-egress.yaml 
 ```
 
@@ -46,7 +47,8 @@ spec:
   egress:
   - {}
 EOF
-
+```
+```
 kubectl apply -n my-demo-app -f allow-80-443-egress.yaml 
 ```
 Please note that network policies are applied even on running pods.
@@ -66,9 +68,11 @@ spec:
   - 198.199.124.250/24
   - 95.85.54.44/32
 EOF
-
+```
+```
 calicoctl apply -n my-demo-app -f networkset-external-api.yaml
-
+```
+```
 cat >deny-external-api.yaml <<EOF
 apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
@@ -85,9 +89,48 @@ spec:
       destination:
         selector: role == "api"
 EOF
-
+```
+```
 calicoctl apply -n my-demo-app -f deny-external-api.yaml
 ```
 
-
+### 4. Deny Egress access via Calico Global Network sets
+```
+cat >global-networkset-external-api.yaml <<EOF
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkSet
+metadata:
+  name: global-networkset-external-api
+  labels:
+    role: api-global
+spec:
+  nets:
+  - 198.199.124.250/24
+  - 95.85.54.44/32
+EOF
+```
+```
+calicoctl apply -f global-networkset-external-api.yaml
+```
+```
+cat >global-deny-external-api.yaml <<EOF
+apiVersion: projectcalico.org/v3
+kind: NetworkPolicy
+metadata:
+  name: global-external-api-access
+spec:
+  order: 80
+  selector:
+    allow-internet-egress == "true"
+  types:
+    - Egress
+  egress:    
+    - action: Deny
+      destination:
+        selector: role == "api-global"
+EOF
+```
+```
+calicoctl apply -f global-deny-external-api.yaml
+```
 
