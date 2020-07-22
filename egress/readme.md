@@ -137,6 +137,9 @@ EOF
 ```
 calicoctl apply -f global-deny-external-api.yaml
 ```
+```
+kubectl run -it --rm --image xxradar/hackon -l allow-internet-egress=true my-app -- bash
+```
 ### 5. Allow Egress access based on FQDN
 In order to continue, let's delete the previous policies.
 ```
