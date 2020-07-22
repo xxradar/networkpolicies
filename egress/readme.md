@@ -119,7 +119,7 @@ calicoctl apply -f global-networkset-external-api.yaml
 ```
 cat >global-deny-external-api.yaml <<EOF
 apiVersion: projectcalico.org/v3
-kind: NetworkPolicy
+kind: GlobalNetworkPolicy
 metadata:
   name: global-external-api-access
 spec:
