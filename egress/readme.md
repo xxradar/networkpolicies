@@ -142,7 +142,7 @@ In order to continue, let's delete the previous policies.
 ```
 kubectl delete networkpolicies  allow-80-443-egress -n my-demo-app 
 calicoctl delete networkpolicies  external-api-access -n my-demo-app 
-calicoctl delete globalnetworkpolicies  global-external-api-access -n my-demo-app 
+calicoctl delete globalnetworkpolicies global-external-api-access
 ```
 Let's create a namespaced network policies allowing only a specific fqdn
 ```
