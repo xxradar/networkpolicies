@@ -137,7 +137,7 @@ EOF
 ```
 calicoctl apply -f global-deny-external-api.yaml
 ```
-We can test this spinnign up a pod in another namespace (ex. default)
+We can test this spinning up a pod in another namespace (ex. default)
 ```
 kubectl run -it --rm --image xxradar/hackon -l allow-internet-egress=true my-app -- bash
 ```
