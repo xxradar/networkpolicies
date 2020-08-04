@@ -150,11 +150,11 @@ calicoctl delete globalnetworkpolicies global-external-api-access
 ```
 Let's create a **namespaced** network policy allowing only a specific fqdn
 ```
-cat >dns-deny-external-api.yaml <<EOF
+cat >dns-allow-external-api.yaml <<EOF
 apiVersion: projectcalico.org/v3
 kind: NetworkPolicy
 metadata:
-  name: dns-deny-external-api
+  name: dns-allow-external-api
 spec:
   selector: allow-internet-egress == "true"
   egress:
@@ -168,5 +168,5 @@ spec:
 EOF
 ```
 ```
-kubectl apply  -n my-demo-app -f dns-deny-external-api.yaml
+kubectl apply  -n my-demo-app -f dns-allow-external-api.yaml
 ```
