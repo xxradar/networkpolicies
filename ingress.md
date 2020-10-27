@@ -45,6 +45,7 @@ spec:
     kubernetes.io/os: linux
 EOF
 ```
+### Get IP address pod
 ```
 kubectl get po -n laser -o wide
 ```
