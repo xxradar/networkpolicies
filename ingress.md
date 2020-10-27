@@ -53,3 +53,97 @@ kubectl get po -n laser -o wide
 ```
 kubectl exec -it debug -n laser -- bash
 ```
+
+### Apply a INGRESS (1) Deny All netpol on the nginx deployment and (2) allow port 80
+```
+kubectl apply -n laser -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  policyTypes:
+   - Ingress
+   - Egress
+EOF
+```
+```
+kubectl apply -n laser -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels: {}
+    ports:
+    - protocol: TCP
+      port: 80
+EOF
+```
+```
+kubectl get netpol -n laser
+```
+
+### Create a policy for the debug pod
+```
+kubectl delete netpol -n laser allow-http
+```
+```
+kubectl apply -n laser -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector:
+    matchLabels: {}
+  policyTypes:
+   - Ingress
+   - Egress
+EOF
+```
+```
+kubectl apply -n laser -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http-debug
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          debug: "true"
+    ports:
+    - protocol: TCP
+      port: 80
+EOF
+```
+```
+kubectl apply -n laser -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-http-egress
+spec:
+  podSelector:
+    matchLabels:
+      debug: "true"
+  egress:
+  - to:
+    - podSelector:
+        matchLabels: {}
+EOF
+```
