@@ -93,9 +93,10 @@ EOF
 kubectl get netpol -n laser
 ```
 
-### Create a policy for the debug pod
+### Apply a INGRESS (1) Default Deny All netpol and (2) allow port 80 for debug pod and (3) control egress from pods
 ```
 kubectl delete netpol -n laser allow-http
+kubectl delete netpol -n laser default-deny
 ```
 ```
 kubectl apply -n laser -f - <<EOF
