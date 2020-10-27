@@ -148,3 +148,41 @@ spec:
         matchLabels: {}
 EOF
 ```
+### Create a global quarantine rule
+```
+kubectl apply -f - <<EOF
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: default.quarantine
+spec:
+  tier: default
+  order: 490
+  selector: quarantine == "true"
+  namespaceSelector: ''
+  serviceAccountSelector: ''
+  ingress:
+    - action: Deny
+      source: {}
+      destination: {}
+  egress:
+    - action: Deny
+      source: {}
+      destination: {}
+  doNotTrack: false
+  applyOnForward: false
+  preDNAT: false
+  types:
+    - Ingress
+    - Egress
+EOF
+```
+```
+kubectl get po -n laser --show-labels
+kubectl exec -it debug -n laser -- bash 
+```
+```
+kubectl label po debug -n laser quarantine="true" --overwrite
+kubectl exec -it debug -n laser -- bash 
+```
+```
