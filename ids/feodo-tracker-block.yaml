@@ -1,19 +1,13 @@
 apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
 metadata:
-  name: security.hacker
+  name: security.threatfeed
 spec:
   tier: security
   order: 200
   selector: quarantine != "true"
   namespaceSelector: ''
   serviceAccountSelector: ''
-  ingress:
-    - action: Allow
-      source:
-        selector: all()
-        namespaceSelector: all()
-      destination: {}
   egress:
     - action: Allow
       protocol: UDP
@@ -31,6 +25,4 @@ spec:
   applyOnForward: false
   preDNAT: false
   types:
-    - Ingress
     - Egress
-
