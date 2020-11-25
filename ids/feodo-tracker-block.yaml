@@ -1,20 +1,40 @@
 apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
 metadata:
-  name: security.block-feodo
+  name: security.hacker
 spec:
   tier: security
-  order: 210
-  selector: projectcalico.org/namespace != "acme"
-  namespaceSelector: ''
+  order: 200
+  selector: ''
+  namespaceSelector: hacker == "true"
   serviceAccountSelector: ''
+  ingress:
+    - action: Allow
+      source:
+        selector: all()
+        namespaceSelector: all()
+      destination: {}
   egress:
+    - action: Allow
+      protocol: UDP
+      source: {}
+      destination:
+        selector: all()
+        namespaceSelector: all()
+        ports:
+          - '53'
     - action: Deny
       source: {}
       destination:
         selector: threatfeed == "feodo"
+    - action: Allow
+      source: {}
+      destination:
+        nets:
+          - 0.0.0.0/0
   doNotTrack: false
   applyOnForward: false
   preDNAT: false
   types:
+    - Ingress
     - Egress
