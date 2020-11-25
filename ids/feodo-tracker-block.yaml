@@ -1,12 +1,12 @@
 apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
 metadata:
-  name: security.hacker
+  name: security.threatfeed-block
 spec:
   tier: security
   order: 200
-  selector: ''
-  namespaceSelector: hacker == "true"
+  selector: quarantine != "true"
+  namespaceSelector: ''
   serviceAccountSelector: ''
   ingress:
     - action: Allow
@@ -27,7 +27,7 @@ spec:
       source: {}
       destination:
         selector: threatfeed == "feodo"
-    - action: Allow
+    - action: Pass
       source: {}
       destination:
         nets:
