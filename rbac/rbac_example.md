@@ -108,6 +108,9 @@ export KUBECONFIG=$PWD/mykube.conf
 ```
 kubectl run  --image nginx nginxwww
 ```
+```
+kubectl get po -o wide --show-labels
+```
 This will fail ...
 ```
 kubectl apply -n default -f - <<EOF
@@ -118,7 +121,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: nginx
+      run: nginxwww
   ingress:
   - from:
     - podSelector:
@@ -138,7 +141,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: nginx
+      run: nginxwww
   ingress:
   - from:
     - podSelector:
